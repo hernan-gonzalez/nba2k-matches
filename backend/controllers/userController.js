@@ -7,7 +7,7 @@ const User = require('../models/userModel')
 //@route /api/users
 //@access Public
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password } = req.body
+    const { name, email, password, psnUserName } = req.body
     //validation
     if (!name || !email || !password) {
         res.status(400)
@@ -30,7 +30,8 @@ const registerUser = asyncHandler(async (req, res) => {
     const user = await User.create({
         name,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        psnUserName
     })
 
     if (user) {
@@ -38,7 +39,8 @@ const registerUser = asyncHandler(async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-            token: generateToken(user._id)
+            token: generateToken(user._id),
+            psnUserName: user.psnUserName
         })
     } else {
         res.status(400)
@@ -60,7 +62,8 @@ const loginUser = asyncHandler(async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-            token: generateToken(user._id)
+            token: generateToken(user._id),
+            psnUserName: user.psnUserName
         })
     } else {
         res.status(401)
@@ -75,9 +78,23 @@ const getMe = asyncHandler(async (req, res) => {
     const user = {
         user: req.user._id,
         email: req.user.email,
-        name: req.user.name
+        name: req.user.name,
+        psnUserName: req.user.psnUserName
     }
     res.status(200).json(user)
+
+})
+
+
+//@desc Get current user
+//@route /api/users
+//@access Private
+const getUsers = asyncHandler(async (req, res) => {
+
+
+    const users = await User.find()
+
+    res.status(200).json(users)
 
 })
 
@@ -91,5 +108,6 @@ const generateToken = (id) => {
 module.exports = {
     registerUser,
     loginUser,
-    getMe
+    getMe,
+    getUsers
 }

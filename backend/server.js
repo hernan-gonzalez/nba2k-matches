@@ -16,12 +16,12 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 app.get('/', (req, res) => {
-    res.json({ message: 'Welcome to the support ticket api' })
+    res.json({ message: 'Welcome to the 2k matches api' })
 })
 
 //Routes
 app.use('/api/users', require('./routes/usesRoutes'))
-app.use('/api/tickets', require('./routes/ticketRoutes'))
+app.use('/api/boxScore', require('./routes/boxScoreRoute'))
 
 // Serve Frontend
 if (process.env.NODE_ENV === 'production') {
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'production') {
     })
 } else {
     app.get('/', (_, res) => {
-        res.status(200).json({ message: 'Welcome to the Support Desk API' })
+        res.status(200).json({ message: 'Welcome to the 2k matches api' })
     })
 }
 

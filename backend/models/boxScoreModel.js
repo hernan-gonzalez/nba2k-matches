@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const matchSchema = mongoose.Schema(
+const boxScoreSchema = mongoose.Schema(
     {
         player1: {
             user: {
@@ -37,4 +37,4 @@ const matchSchema = mongoose.Schema(
         timestamps: true,
     })
 
-module.exports = mongoose.model('Match', matchSchema)
+module.exports = mongoose.model('BoxScore', boxScoreSchema)
