@@ -10,6 +10,7 @@ import Tickets from './pages/Tickets';
 import Ticket from './pages/Ticket';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import BoxScores from './pages/BoxScores';
 
 function App() {
   return (
@@ -24,8 +25,8 @@ function App() {
             <Route path='/new-ticket' element={<PrivateRoute />} >
               <Route path='/new-ticket' element={<NewTicket />} />
             </Route>
-            <Route path='/tickets' element={<PrivateRoute />} >
-              <Route path='/tickets' element={<Tickets />} />
+            <Route path='/boxScores' element={<PrivateRoute />} >
+              <Route path='/boxScores' element={<BoxScores />} />
             </Route>
             <Route path='/ticket/:ticketId' element={<PrivateRoute />} >
               <Route path='/ticket/:ticketId' element={<Ticket />} />
