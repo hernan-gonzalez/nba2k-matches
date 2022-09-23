@@ -15,8 +15,8 @@ const getBoxScores = asyncHandler(async (req, res) => {
         res.status(401)
         throw new Error('User not found')
     }
-
-    const boxScores = await BoxScore.find({ $or: [{ 'player1.user': req.user.id }, { 'player2.user': req.user.id }] });
+    const boxScores = await BoxScore.find({ $or: [{ 'player1.user': req.user.id }, { 'player2.user': req.user.id }] }).populate('player1.user', 'psnUserName').populate('player2.user', 'psnUserName');
+    console.log(boxScores)
     res.status(200).json(boxScores)
 })
 
