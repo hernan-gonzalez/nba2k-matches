@@ -32,6 +32,10 @@ function BoxScores() {
             <BackButton url="/" />
             <h1>Box Scores</h1>
             <div className="tickets">
+                <div className="ticket-headings-main">
+                    <div>Home</div>
+                    <div>Away</div>
+                </div>
                 <div className="ticket-headings">
                     <div>User 1</div>
                     <div>Team </div>
