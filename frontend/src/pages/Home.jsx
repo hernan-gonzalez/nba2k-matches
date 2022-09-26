@@ -5,16 +5,16 @@ function Home() {
     return (
         <>
             <section className="heading">
-                <h1>What do you need help with?</h1>
+                <h1>Did you had a 2k match today?</h1>
                 <p>Please choose from an option below</p>
             </section>
 
-            <Link to='/new-ticket' className="btn btn-reverse btn-block">
-                <FaQuestionCircle /> Create New Ticket
+            <Link to='/new-boxscore' className="btn btn-reverse btn-block">
+                <FaQuestionCircle /> Add a new box score
             </Link>
 
             <Link to='/boxScores' className="btn btn-block">
-                <FaTicketAlt /> View My Tickets
+                <FaTicketAlt /> View My Matches
             </Link>
         </>
     )

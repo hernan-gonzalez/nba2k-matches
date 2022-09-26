@@ -4,12 +4,12 @@ function BoxScoreItem({ boxScore }) {
     console.log(boxScore);
     return (
         <div className="ticket">
-            <div>{boxScore.player1.user.psnUserName}</div>
-            <div><NBAIcon team={boxScore.player1.team} /></div>
-            <div>{boxScore.player1.score}</div>
-            <div>{boxScore.player2.user.psnUserName}</div>
-            <div><NBAIcon team={boxScore.player2.team} /></div>
-            <div>{boxScore.player2.score}</div>
+            <div>{boxScore.home.user.psnUserName}</div>
+            <div><NBAIcon team={boxScore.home.team} /></div>
+            <div>{boxScore.home.score}</div>
+            <div>{boxScore.away.user.psnUserName}</div>
+            <div><NBAIcon team={boxScore.away.team} /></div>
+            <div>{boxScore.away.score}</div>
         </div>
     );
 }

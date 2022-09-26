@@ -37,10 +37,10 @@ function BoxScores() {
                     <div>Away</div>
                 </div>
                 <div className="ticket-headings">
-                    <div>User 1</div>
+                    <div>User</div>
                     <div>Team </div>
                     <div>Score </div>
-                    <div>User 2</div>
+                    <div>User</div>
                     <div>Team </div>
                     <div>Score </div>
                 </div>

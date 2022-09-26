@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const boxScoreSchema = mongoose.Schema(
     {
-        player1: {
+        home: {
             user: {
                 type: mongoose.Schema.Types.ObjectId,
                 required: true,
@@ -17,7 +17,7 @@ const boxScoreSchema = mongoose.Schema(
                 required: [true, 'Please enter the score']
             }
         },
-        player2: {
+        away: {
             user: {
                 type: mongoose.Schema.Types.ObjectId,
                 required: true,
