@@ -90,10 +90,7 @@ const getMe = asyncHandler(async (req, res) => {
 //@route /api/users
 //@access Private
 const getUsers = asyncHandler(async (req, res) => {
-
-
     const users = await User.find()
-
     res.status(200).json(users)
 
 })

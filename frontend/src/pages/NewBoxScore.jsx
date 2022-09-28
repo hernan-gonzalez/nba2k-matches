@@ -18,7 +18,7 @@ function NewBoxScore() {
     const [currentUserTeam, setCurrentUserTeam] = useState("ATL");
     const [currentUserScore, setCurrentUserScore] = useState(0);
 
-    const [opponentUserGamerTag, setOpponentUserGamerTag] = useState('');
+    const [oponentUserGamerTag, setOponentUserGamerTag] = useState("");
     const [homecourt, setHomeCourt] = useState("away");
     const [oponentUserTeam, setOponentUserTeam] = useState("ATL");
     const [oponentUserScore, setOponentUserScore] = useState(0);
@@ -39,16 +39,38 @@ function NewBoxScore() {
 
     const onSubmit = (e) => {
         e.preventDefault();
-
+        console.log(getFormData());
         // dispatch(createTicket({ product: currentUserTeam, description }));
     };
 
     const getFormData = () => {
-
-        return {
-
+        if (homecourt === "home") {
+            return {
+                home: {
+                    user: user._id,
+                    team: currentUserTeam,
+                    score: currentUserScore,
+                },
+                away: {
+                    user: oponentUserGamerTag,
+                    team: oponentUserTeam,
+                    score: oponentUserScore,
+                },
+            };
         }
-    }
+        return {
+            away: {
+                user: user._id,
+                team: currentUserTeam,
+                score: currentUserScore,
+            },
+            home: {
+                user: oponentUserGamerTag,
+                team: oponentUserTeam,
+                score: oponentUserScore,
+            },
+        };
+    };
 
     if (isLoading) {
         return <Spinner />;
@@ -85,28 +107,41 @@ function NewBoxScore() {
                             {NBATeams.map((team) => (
                                 <option value={team}>{team}</option>
                             ))}
-
                         </select>
                     </div>
                     <div className="form-group">
                         <label htmlFor="currentUserScore">Score</label>
-                        <input type="number" className="form-control" onChange={(e) => setCurrentUserScore(e.target.value)} />
+                        <input
+                            type="number"
+                            className="form-control"
+                            onChange={(e) =>
+                                setCurrentUserScore(e.target.value)
+                            }
+                        />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="away" >Away</label>
-                        <input type="radio" id="away" name="homecourt" value="away" />
-                        <label htmlFor="home" >Home</label>
-                        <input type="radio" id="home" name="homecourt" value="home" />
+                        <label htmlFor="homecourt">Team</label>
+                        <select
+                            name="homecourt"
+                            id="homecourt"
+                            value={homecourt}
+                            onChange={(e) => setHomeCourt(e.target.value)}
+                        >
+                            <option value="away">Away</option>
+                            <option value="home">Home</option>
+                        </select>
                     </div>
                     <hr />
                     <div className="form-group">Opponent</div>
                     <div className="form-group">
-                        <label htmlFor="name">Your gametag</label>
+                        <label htmlFor="name">Opponent gametag</label>
                         <input
                             type="text"
                             className="form-control"
-                            value={opponentUserGamerTag}
-                            onChange={(e) => setOpponentUserGamerTag(e.target.value)}
+                            value={oponentUserGamerTag}
+                            onChange={(e) =>
+                                setOponentUserGamerTag(e.target.value)
+                            }
                         />
                     </div>
                     <div className="form-group">
@@ -120,12 +155,17 @@ function NewBoxScore() {
                             {NBATeams.map((team) => (
                                 <option value={team}>{team}</option>
                             ))}
-
                         </select>
                     </div>
                     <div className="form-group">
                         <label htmlFor="oponentUserScore">Score</label>
-                        <input type="number" className="form-control" onChange={(e) => setOponentUserScore(e.target.value)} />
+                        <input
+                            type="number"
+                            className="form-control"
+                            onChange={(e) =>
+                                setOponentUserScore(e.target.value)
+                            }
+                        />
                     </div>
                     <div className="form-group">
                         <button className="btn btn-block">Submit</button>

@@ -211,13 +211,12 @@ h3 {
 .ticket,
 .ticket-headings {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(7, 1fr);
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
     background: #f4f4f4;
-    padding: 10px 15px;
+    /* padding: 10px 15px; */
     border-radius: 5px;
     text-align: center;
 }
@@ -388,6 +387,15 @@ footer {
     border-color: #000 transparent #555 transparent;
     border-radius: 50%;
     animation: spin 1.2s linear infinite;
+}
+
+#divider {
+    content: " ";
+    border-right: 20px solid black;
+}
+
+.form {
+    padding-bottom: 5px;
 }
 
 @keyframes spin {

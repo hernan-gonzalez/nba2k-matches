@@ -40,6 +40,7 @@ function BoxScores() {
                     <div>User</div>
                     <div>Team </div>
                     <div>Score </div>
+                    <div></div>
                     <div>User</div>
                     <div>Team </div>
                     <div>Score </div>

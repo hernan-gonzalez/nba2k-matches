@@ -5,10 +5,15 @@ function BoxScoreItem({ boxScore }) {
     return (
         <div className="ticket">
             <div>{boxScore.home.user.psnUserName}</div>
-            <div><NBAIcon team={boxScore.home.team} /></div>
+            <div>
+                <NBAIcon team={boxScore.home.team} />
+            </div>
             <div>{boxScore.home.score}</div>
+            <div id="divider"></div>
             <div>{boxScore.away.user.psnUserName}</div>
-            <div><NBAIcon team={boxScore.away.team} /></div>
+            <div>
+                <NBAIcon team={boxScore.away.team} />
+            </div>
             <div>{boxScore.away.score}</div>
         </div>
     );
