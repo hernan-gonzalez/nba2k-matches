@@ -12,11 +12,16 @@ function NewBoxScore() {
     const { isLoading, isError, isSuccess, message } = useSelector(
         (state) => state.boxScores
     );
-    const [name] = useState(user.name);
+    const [currentUser] = useState(user.name);
     const [email] = useState(user.email);
-    const [psnUserName] = useState(user.psnUserName);
-    const [product, setProduct] = useState("iPhone");
-    const [description, setDescription] = useState("");
+    const [currentUserGamerTag] = useState(user.psnUserName);
+    const [currentUserTeam, setCurrentUserTeam] = useState("ATL");
+    const [currentUserScore, setCurrentUserScore] = useState(0);
+
+    const [opponentUserGamerTag, setOpponentUserGamerTag] = useState('');
+    const [homecourt, setHomeCourt] = useState("away");
+    const [oponentUserTeam, setOponentUserTeam] = useState("ATL");
+    const [oponentUserScore, setOponentUserScore] = useState(0);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -35,8 +40,15 @@ function NewBoxScore() {
     const onSubmit = (e) => {
         e.preventDefault();
 
-        dispatch(createTicket({ product, description }));
+        // dispatch(createTicket({ product: currentUserTeam, description }));
     };
+
+    const getFormData = () => {
+
+        return {
+
+        }
+    }
 
     if (isLoading) {
         return <Spinner />;
@@ -56,19 +68,19 @@ function NewBoxScore() {
                     <input
                         type="text"
                         className="form-control"
-                        value={psnUserName}
+                        value={currentUserGamerTag}
                         disabled
                     />
                 </div>
 
                 <form onSubmit={onSubmit}>
                     <div className="form-group">
-                        <label htmlFor="product">Team</label>
+                        <label htmlFor="currentUserTeam">Team</label>
                         <select
-                            name="product"
-                            id="product"
-                            value={product}
-                            onChange={(e) => setProduct(e.target.value)}
+                            name="currentUserTeam"
+                            id="currentUserTeam"
+                            value={currentUserTeam}
+                            onChange={(e) => setCurrentUserTeam(e.target.value)}
                         >
                             {NBATeams.map((team) => (
                                 <option value={team}>{team}</option>
@@ -77,8 +89,8 @@ function NewBoxScore() {
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="score">Score</label>
-                        <input type="number" className="form-control" />
+                        <label htmlFor="currentUserScore">Score</label>
+                        <input type="number" className="form-control" onChange={(e) => setCurrentUserScore(e.target.value)} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="away" >Away</label>
@@ -89,12 +101,21 @@ function NewBoxScore() {
                     <hr />
                     <div className="form-group">Opponent</div>
                     <div className="form-group">
-                        <label htmlFor="product">Team</label>
+                        <label htmlFor="name">Your gametag</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={opponentUserGamerTag}
+                            onChange={(e) => setOpponentUserGamerTag(e.target.value)}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="oponentUserTeam">Team</label>
                         <select
-                            name="product"
-                            id="product"
-                            value={product}
-                            onChange={(e) => setProduct(e.target.value)}
+                            name="oponentUserTeam"
+                            id="oponentUserTeam"
+                            value={oponentUserTeam}
+                            onChange={(e) => setOponentUserTeam(e.target.value)}
                         >
                             {NBATeams.map((team) => (
                                 <option value={team}>{team}</option>
@@ -103,8 +124,8 @@ function NewBoxScore() {
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="score">Score</label>
-                        <input type="number" className="form-control" />
+                        <label htmlFor="oponentUserScore">Score</label>
+                        <input type="number" className="form-control" onChange={(e) => setOponentUserScore(e.target.value)} />
                     </div>
                     <div className="form-group">
                         <button className="btn btn-block">Submit</button>
