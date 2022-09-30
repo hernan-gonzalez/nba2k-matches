@@ -216,7 +216,7 @@ h3 {
     align-items: center;
     margin-bottom: 20px;
     background: #f4f4f4;
-    /* padding: 10px 15px; */
+    padding: 0 5px 0 5px;
     border-radius: 5px;
     text-align: center;
 }
@@ -390,7 +390,6 @@ footer {
 }
 
 #divider {
-    content: " ";
     border-right: 20px solid black;
 }
 

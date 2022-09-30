@@ -6,9 +6,11 @@ import { createTicket, reset } from "../features/tickets/ticketSlice";
 import Spinner from "../components/Spinner";
 import BackButton from "../components/BackButton";
 import { NBATeams } from "../utils/nbaTeams";
+import { getUsers } from "../features/auth/authSlice";
+import { createBoxScore } from '../features/boxScores/boxScoresSlice';
 
 function NewBoxScore() {
-    const { user } = useSelector((state) => state.auth);
+    const { user, users } = useSelector((state) => state.auth);
     const { isLoading, isError, isSuccess, message } = useSelector(
         (state) => state.boxScores
     );
@@ -18,7 +20,7 @@ function NewBoxScore() {
     const [currentUserTeam, setCurrentUserTeam] = useState("ATL");
     const [currentUserScore, setCurrentUserScore] = useState(0);
 
-    const [oponentUserGamerTag, setOponentUserGamerTag] = useState("");
+    const [oponentUserGamerTag, setOponentUserGamerTag] = useState(users[0]._id);
     const [homecourt, setHomeCourt] = useState("away");
     const [oponentUserTeam, setOponentUserTeam] = useState("ATL");
     const [oponentUserScore, setOponentUserScore] = useState(0);
@@ -27,12 +29,16 @@ function NewBoxScore() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        dispatch(getUsers())
+    }, [])
+
+    useEffect(() => {
         if (isError) {
             toast.error(message);
         }
         if (isSuccess) {
             dispatch(reset());
-            navigate("/tickets");
+            navigate("/boxScores");
         }
         dispatch(reset());
     }, [dispatch, isError, isSuccess, navigate, message]);
@@ -40,10 +46,12 @@ function NewBoxScore() {
     const onSubmit = (e) => {
         e.preventDefault();
         console.log(getFormData());
+        dispatch(createBoxScore(getFormData()));
         // dispatch(createTicket({ product: currentUserTeam, description }));
     };
 
     const getFormData = () => {
+        console.log(oponentUserGamerTag)
         if (homecourt === "home") {
             return {
                 home: {
@@ -135,14 +143,16 @@ function NewBoxScore() {
                     <div className="form-group">Opponent</div>
                     <div className="form-group">
                         <label htmlFor="name">Opponent gametag</label>
-                        <input
-                            type="text"
-                            className="form-control"
+                        <select
+                            name="oponentUserGamerTag"
+                            id="oponentUserGamerTag"
                             value={oponentUserGamerTag}
-                            onChange={(e) =>
-                                setOponentUserGamerTag(e.target.value)
-                            }
-                        />
+                            onChange={(e) => setOponentUserGamerTag(e.target.value)}
+                        >
+                            {users.map((user) => (
+                                <option value={user.id}>{user.psnUserName}</option>
+                            ))}
+                        </select>
                     </div>
                     <div className="form-group">
                         <label htmlFor="oponentUserTeam">Team</label>

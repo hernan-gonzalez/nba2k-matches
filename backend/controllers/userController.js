@@ -90,7 +90,7 @@ const getMe = asyncHandler(async (req, res) => {
 //@route /api/users
 //@access Private
 const getUsers = asyncHandler(async (req, res) => {
-    const users = await User.find()
+    const users = await User.find({ _id: { $ne: req.user.id } }).select('psnUserName')
     res.status(200).json(users)
 
 })
