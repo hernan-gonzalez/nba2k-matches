@@ -7,7 +7,7 @@ import Spinner from "../components/Spinner";
 import BackButton from "../components/BackButton";
 import { NBATeams } from "../utils/nbaTeams";
 import { getUsers } from "../features/auth/authSlice";
-import { createBoxScore } from '../features/boxScores/boxScoresSlice';
+import { createBoxScore } from "../features/boxScores/boxScoresSlice";
 
 function NewBoxScore() {
     const { user, users } = useSelector((state) => state.auth);
@@ -20,7 +20,9 @@ function NewBoxScore() {
     const [currentUserTeam, setCurrentUserTeam] = useState("ATL");
     const [currentUserScore, setCurrentUserScore] = useState(0);
 
-    const [oponentUserGamerTag, setOponentUserGamerTag] = useState(users[0]._id);
+    const [oponentUserGamerTag, setOponentUserGamerTag] = useState(
+        users[0]?._id
+    );
     const [homecourt, setHomeCourt] = useState("away");
     const [oponentUserTeam, setOponentUserTeam] = useState("ATL");
     const [oponentUserScore, setOponentUserScore] = useState(0);
@@ -29,8 +31,9 @@ function NewBoxScore() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(getUsers())
-    }, [])
+        dispatch(getUsers());
+        setOponentUserGamerTag(users[0]._id);
+    }, []);
 
     useEffect(() => {
         if (isError) {
@@ -51,7 +54,7 @@ function NewBoxScore() {
     };
 
     const getFormData = () => {
-        console.log(oponentUserGamerTag)
+        console.log(oponentUserGamerTag);
         if (homecourt === "home") {
             return {
                 home: {
@@ -113,7 +116,9 @@ function NewBoxScore() {
                             onChange={(e) => setCurrentUserTeam(e.target.value)}
                         >
                             {NBATeams.map((team) => (
-                                <option value={team}>{team}</option>
+                                <option key={team} value={team}>
+                                    {team}
+                                </option>
                             ))}
                         </select>
                     </div>
@@ -147,10 +152,14 @@ function NewBoxScore() {
                             name="oponentUserGamerTag"
                             id="oponentUserGamerTag"
                             value={oponentUserGamerTag}
-                            onChange={(e) => setOponentUserGamerTag(e.target.value)}
+                            onChange={(e) =>
+                                setOponentUserGamerTag(e.target.value)
+                            }
                         >
                             {users.map((user) => (
-                                <option value={user.id}>{user.psnUserName}</option>
+                                <option key={user.id} value={user.id}>
+                                    {user.psnUserName}
+                                </option>
                             ))}
                         </select>
                     </div>
