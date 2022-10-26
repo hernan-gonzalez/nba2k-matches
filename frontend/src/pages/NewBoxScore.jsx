@@ -32,7 +32,7 @@ function NewBoxScore() {
 
     useEffect(() => {
         dispatch(getUsers());
-        setOponentUserGamerTag(users[0]._id);
+        setOponentUserGamerTag(users[0]?._id);
     }, []);
 
     useEffect(() => {
@@ -48,13 +48,10 @@ function NewBoxScore() {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        console.log(getFormData());
         dispatch(createBoxScore(getFormData()));
-        // dispatch(createTicket({ product: currentUserTeam, description }));
     };
 
     const getFormData = () => {
-        console.log(oponentUserGamerTag);
         if (homecourt === "home") {
             return {
                 home: {
@@ -140,8 +137,8 @@ function NewBoxScore() {
                             value={homecourt}
                             onChange={(e) => setHomeCourt(e.target.value)}
                         >
-                            <option value="away">Away</option>
-                            <option value="home">Home</option>
+                            <option key={"away"} value="away">Away</option>
+                            <option key={"home"} value="home">Home</option>
                         </select>
                     </div>
                     <hr />
