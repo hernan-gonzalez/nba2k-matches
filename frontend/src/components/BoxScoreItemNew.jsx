@@ -2,8 +2,8 @@
 import { NBAIcon } from "./NBAIcon";
 function BoxScoreItemNew({ boxScore }) {
     return (
-        <div className="relative flex  flex-col items-center justify-center my-2">
-            <div className="h-84 flex w-64 flex-col items-center justify-center space-y-2 rounded-lg bg-gray-200 md:h-36 md:w-64 md:flex-row md:space-y-0">
+        <div className="relative flex flex-col items-center justify-center my-2">
+            <div className="h-84 flex w-64 flex-col items-center justify-center space-y-2 rounded-lg bg-gray-100 md:h-36 md:w-96 md:flex-row md:space-y-0">
                 <div className="flex w-1/2 flex-row justify-center py-2">
                     <div className="flex flex-col items-center justify-center rounded-md p-2">
                         <NBAIcon team={boxScore.home.team} />
