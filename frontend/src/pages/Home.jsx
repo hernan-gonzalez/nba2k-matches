@@ -5,23 +5,18 @@ function Home() {
     return (
         <>
             <section className="heading">
-                <h1>Did you had a 2k match today?</h1>
+                <h1>Did you play 2k today?</h1>
                 <p>Please choose from an option below</p>
             </section>
 
             <div className="flex flex-row space-x-4 justify-center">
-                <button class="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-
-                    <Link to='/new-boxscore' >
-                        <FaBasketballBall /> Add a new box score
-                    </Link>
-                </button>
-                <button class="flex bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                    <Link to='/boxScores'>
-                        <FaBox /> View My Matches
-                    </Link>
-                </button>
-
+                <Link className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold p-4 rounded" to='/new-boxscore' >
+                    <FaBasketballBall className="my-auto" /> <div className="px-2">Add a new box score</div>
+                </Link>
+                <Link className="flex bg-gray-500 hover:bg-gray-700 text-white font-bold p-4 rounded" to='/boxScoresnew'>
+                    <FaBox className=" my-auto" />
+                    <div className="px-2">View My Matches</div>
+                </Link>
             </div>
 
 

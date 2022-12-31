@@ -49,8 +49,12 @@ function BoxScoresNew() {
     return (
         <>
             <BackButton url="/" />
-            <h1>Box Scores</h1>
-            <h2>{currentUser.name}'s Record {boxScores.filter(filterByWinner).length + '-' + (boxScores.length - boxScores.filter(filterByWinner).length)}</h2>
+            <h1>Recent Matches</h1>
+            <div className="flex flex-col mx-auto justify-center align-center bg-gray-300 w-48 rounded">
+                <div className="">All time record</div>
+                <div className="">{boxScores.filter(filterByWinner).length + '-' + (boxScores.length - boxScores.filter(filterByWinner).length)}</div>
+            </div>
+            {/* <h2>{currentUser.psnUserName}'s Record {boxScores.filter(filterByWinner).length + '-' + (boxScores.length - boxScores.filter(filterByWinner).length)}</h2> */}
             {boxScores.map((boxScore) => (
                 <BoxScoreItemNew key={boxScore._id} boxScore={boxScore} />
             ))}
