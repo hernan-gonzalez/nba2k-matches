@@ -17,16 +17,21 @@ function Header() {
         <header className="header">
             <div className="flex space-x-2">
                 <Link to="/">NBA 2k23 Game Log</Link>
-                <div>{user?.psnUserName}</div>
             </div>
             <ul>
                 {user ? (
-                    <li>
-                        <div className="flex justify-center content-center align-items-center bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded" onClick={onLogout}>
-                            <FaSignOutAlt className="my-auto mx-2" />
-                            <div className="div">Logout</div>
+                    <div className="flex flex-row">
+                        <div className="my-auto bg-gray-300 rounded rounded-xl p-2">
+                            <div className="font-bold">{user.psnUserName}</div>
                         </div>
-                    </li>
+                        <li>
+                            <div className="flex justify-center content-center align-items-center bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded" onClick={onLogout}>
+                                <FaSignOutAlt className="my-auto mx-2" />
+                                <div className="div">Logout</div>
+                            </div>
+                        </li>
+                    </div>
+
                 ) : (
                     <>
                         <li>

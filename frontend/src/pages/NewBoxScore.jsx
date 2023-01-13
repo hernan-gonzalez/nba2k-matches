@@ -58,11 +58,13 @@ function NewBoxScore() {
                     user: user._id,
                     team: currentUserTeam,
                     score: currentUserScore,
+                    outcome: currentUserScore > oponentUserScore ? "W" : "L"
                 },
                 away: {
                     user: oponentUserGamerTag,
                     team: oponentUserTeam,
                     score: oponentUserScore,
+                    outcome: oponentUserScore > currentUserScore ? "W" : "L"
                 },
             };
         }
@@ -71,11 +73,13 @@ function NewBoxScore() {
                 user: user._id,
                 team: currentUserTeam,
                 score: currentUserScore,
+                outcome: currentUserScore > oponentUserScore ? "W" : "L"
             },
             home: {
                 user: oponentUserGamerTag,
                 team: oponentUserTeam,
                 score: oponentUserScore,
+                outcome: oponentUserScore > currentUserScore ? "W" : "L"
             },
         };
     };
