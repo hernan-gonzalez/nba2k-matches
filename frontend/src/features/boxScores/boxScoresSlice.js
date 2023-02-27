@@ -42,6 +42,18 @@ export const getBoxScore = createAsyncThunk('boxScores/get', async (ticketId, th
     }
 })
 
+//Get player record
+
+export const getPlayerRecord = createAsyncThunk('boxScores/record', async (_, thunkApi) => {
+    try {
+        const token = thunkApi.getState().auth.user.token
+        return await boxScoresService.getPlayerRecord(token)
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkApi.rejectWithValue(message)
+    }
+})
+
 
 export const boxScoresSlice = createSlice({
     name: 'boxScores',
