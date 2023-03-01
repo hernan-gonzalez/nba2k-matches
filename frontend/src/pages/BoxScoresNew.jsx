@@ -3,14 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import Spinner from "../components/Spinner";
 import BackButton from "../components/BackButton";
 import TicketItem from "../components/TicketItem";
-import { getBoxScores, reset } from "../features/boxScores/boxScoresSlice";
+import { getBoxScores, getBoxScoresWithPlayerRecord, getPlayerRecord, reset, } from "../features/boxScores/boxScoresSlice";
 import BoxScoreItem from "../components/BoxScoreItem";
 import { FaArchway } from "react-icons/fa";
 import { current } from "@reduxjs/toolkit";
 import BoxScoreItemNew from "../components/BoxScoreItemNew";
 
 function BoxScoresNew() {
-    const { boxScores, isLoading, isSuccess, isError } = useSelector(
+    const { boxScores, record, isLoading, isSuccess, isError } = useSelector(
         (state) => state.boxScores
     );
 
@@ -25,25 +25,13 @@ function BoxScoresNew() {
     }, [dispatch, isSuccess]);
 
     useEffect(() => {
-        dispatch(getBoxScores());
+        dispatch(getBoxScoresWithPlayerRecord());
     }, [dispatch]);
+
+
 
     if (isLoading) {
         return <Spinner />;
-    }
-
-    const getWinnerUser = (boxScore) => {
-        const { away, home } = boxScore;
-
-        if (away.score > home.score)
-            return away.user;
-        else
-            return home.user;
-    }
-
-    const filterByWinner = (boxScore) => {
-        const winner = getWinnerUser(boxScore);
-        return winner._id === currentUser._id;
     }
 
     return (
@@ -51,8 +39,7 @@ function BoxScoresNew() {
             <BackButton url="/" />
             <h1>Recent Matches</h1>
             <div className="flex flex-col mx-auto justify-center align-center bg-gray-300 w-48 rounded">
-                <div className="">All time record</div>
-                <div className="">{boxScores.filter(filterByWinner).length + '-' + (boxScores.length - boxScores.filter(filterByWinner).length)}</div>
+                <div className="">All time record</div>       <div className="">{record.wins + '-' + (record.totalGames - record.wins)}</div>
             </div>
             {/* <h2>{currentUser.psnUserName}'s Record {boxScores.filter(filterByWinner).length + '-' + (boxScores.length - boxScores.filter(filterByWinner).length)}</h2> */}
             {boxScores.map((boxScore) => (
