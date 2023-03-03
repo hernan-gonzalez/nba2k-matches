@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -8,6 +8,8 @@ import BackButton from "../components/BackButton";
 import { NBATeams } from "../utils/nbaTeams";
 import { getUsers } from "../features/auth/authSlice";
 import { createBoxScore } from "../features/boxScores/boxScoresSlice";
+
+import { useForm } from "react-hook-form";
 
 function NewBoxScore() {
     const { user, users } = useSelector((state) => state.auth);
@@ -30,6 +32,8 @@ function NewBoxScore() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const { register, handleSubmit, formState: { errors }, getValues } = useForm();
+
     useEffect(() => {
         dispatch(getUsers());
         setOponentUserGamerTag(users[0]?._id);
@@ -46,40 +50,40 @@ function NewBoxScore() {
         dispatch(reset());
     }, [dispatch, isError, isSuccess, navigate, message]);
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        dispatch(createBoxScore(getFormData()));
+    const onSubmit = (data) => {
+
+        dispatch(createBoxScore(getFormData(data)));
     };
 
-    const getFormData = () => {
+    const getFormData = (data) => {
         if (homecourt === "home") {
             return {
                 home: {
                     user: user._id,
-                    team: currentUserTeam,
-                    score: currentUserScore,
-                    outcome: currentUserScore > oponentUserScore ? "W" : "L"
+                    team: data.currentUserTeam,
+                    score: parseInt(data.currentUserScore),
+                    outcome: parseInt(data.currentUserScore) > parseInt(data.oponentUserScore) ? "W" : "L"
                 },
                 away: {
-                    user: oponentUserGamerTag,
-                    team: oponentUserTeam,
-                    score: oponentUserScore,
-                    outcome: oponentUserScore > currentUserScore ? "W" : "L"
+                    user: data.oponentUserGamerTag,
+                    team: data.oponentUserTeam,
+                    score: parseInt(data.oponentUserScore),
+                    outcome: parseInt(data.oponentUserScore) > parseInt(data.currentUserScore) ? "W" : "L"
                 },
             };
         }
         return {
             away: {
                 user: user._id,
-                team: currentUserTeam,
-                score: currentUserScore,
-                outcome: currentUserScore > oponentUserScore ? "W" : "L"
+                team: data.currentUserTeam,
+                score: parseInt(data.currentUserScore),
+                outcome: parseInt(data.currentUserScore) > parseInt(data.oponentUserScore) ? "W" : "L"
             },
             home: {
-                user: oponentUserGamerTag,
-                team: oponentUserTeam,
-                score: oponentUserScore,
-                outcome: oponentUserScore > currentUserScore ? "W" : "L"
+                user: data.oponentUserGamerTag,
+                team: data.oponentUserTeam,
+                score: parseInt(data.oponentUserScore),
+                outcome: parseInt(data.oponentUserScore) > parseInt(data.currentUserScore) ? "W" : "L"
             },
         };
     };
@@ -103,20 +107,18 @@ function NewBoxScore() {
                         type="text"
                         className="form-control"
                         value={currentUserGamerTag}
-                        disabled
+                        readOnly
                     />
                 </div>
 
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="form-group">
                         <label htmlFor="currentUserTeam">Team</label>
                         <select
-                            name="currentUserTeam"
-                            id="currentUserTeam"
-                            value={currentUserTeam}
-                            onChange={(e) => setCurrentUserTeam(e.target.value)}
+                            {...register("currentUserTeam")}
+
                         >
-                            {NBATeams.map((team) => (
+                            {NBATeams.map((team, index) => (
                                 <option key={team} value={team}>
                                     {team}
                                 </option>
@@ -128,18 +130,15 @@ function NewBoxScore() {
                         <input
                             type="number"
                             className="form-control"
-                            onChange={(e) =>
-                                setCurrentUserScore(e.target.value)
-                            }
+                            {...register("currentUserScore", { required: true, min: 1 })}
+
                         />
                     </div>
                     <div className="form-group">
                         <label htmlFor="homecourt">Team</label>
                         <select
-                            name="homecourt"
-                            id="homecourt"
-                            value={homecourt}
-                            onChange={(e) => setHomeCourt(e.target.value)}
+                            {...register("homecourt",)}
+
                         >
                             <option key={"away"} value="away">Away</option>
                             <option key={"home"} value="home">Home</option>
@@ -148,32 +147,31 @@ function NewBoxScore() {
                     <hr />
                     <div className="form-group">Opponent</div>
                     <div className="form-group">
-                        <label htmlFor="name">Opponent gametag</label>
+                        <label htmlFor="Opponent gametag">Opponent gametag</label>
                         <select
+                            {...register("oponentUserGamerTag", { required: true })}
                             name="oponentUserGamerTag"
                             id="oponentUserGamerTag"
-                            value={oponentUserGamerTag}
-                            onChange={(e) =>
-                                setOponentUserGamerTag(e.target.value)
-                            }
+
                         >
-                            {users.map((user) => (
-                                <option key={user.id} value={user.id}>
-                                    {user.psnUserName}
-                                </option>
-                            ))}
+                            {
+                                users.map((user) => (
+                                    <option key={user.id} value={user._id}>
+                                        {user.psnUserName}
+                                    </option>
+                                ))
+                            }
                         </select>
                     </div>
                     <div className="form-group">
                         <label htmlFor="oponentUserTeam">Team</label>
                         <select
+
+                            {...register("oponentUserTeam", { required: true })}
                             name="oponentUserTeam"
-                            id="oponentUserTeam"
-                            value={oponentUserTeam}
-                            onChange={(e) => setOponentUserTeam(e.target.value)}
                         >
-                            {NBATeams.map((team) => (
-                                <option value={team}>{team}</option>
+                            {NBATeams.map((team, index) => (
+                                <option key={team} value={team}>{team}</option>
                             ))}
                         </select>
                     </div>
@@ -181,10 +179,7 @@ function NewBoxScore() {
                         <label htmlFor="oponentUserScore">Score</label>
                         <input
                             type="number"
-                            className="form-control"
-                            onChange={(e) =>
-                                setOponentUserScore(e.target.value)
-                            }
+                            {...register("oponentUserScore", { required: true, min: 1 })}
                         />
                     </div>
                     <div className="form-group">

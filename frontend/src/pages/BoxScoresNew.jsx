@@ -8,9 +8,9 @@ import BoxScoreItem from "../components/BoxScoreItem";
 import { FaArchway } from "react-icons/fa";
 import { current } from "@reduxjs/toolkit";
 import BoxScoreItemNew from "../components/BoxScoreItemNew";
-
+import { toast } from "react-toastify";
 function BoxScoresNew() {
-    const { boxScores, record, isLoading, isSuccess, isError } = useSelector(
+    const { boxScores, record, isLoading, isSuccess, isError, message } = useSelector(
         (state) => state.boxScores
     );
 
@@ -28,10 +28,12 @@ function BoxScoresNew() {
         dispatch(getBoxScoresWithPlayerRecord());
     }, [dispatch]);
 
-
-
     if (isLoading) {
         return <Spinner />;
+    }
+
+    if (isError) {
+        toast.error(message)
     }
 
     return (
@@ -41,26 +43,10 @@ function BoxScoresNew() {
             <div className="flex flex-col mx-auto justify-center align-center bg-gray-300 w-48 rounded">
                 <div className="">All time record</div>       <div className="">{record.wins + '-' + (record.totalGames - record.wins)}</div>
             </div>
-            {/* <h2>{currentUser.psnUserName}'s Record {boxScores.filter(filterByWinner).length + '-' + (boxScores.length - boxScores.filter(filterByWinner).length)}</h2> */}
             {boxScores.map((boxScore) => (
                 <BoxScoreItemNew key={boxScore._id} boxScore={boxScore} />
             ))}
-            {/* <div className="tickets">
-                <div className="ticket-headings-main">
-                    <div>Home</div>
-                    <div>Away</div>
-                </div>
-                <div className="ticket-headings">
-                    <div>User</div>
-                    <div>Team </div>
-                    <div>Score </div>
-                    <div></div>
-                    <div>User</div>
-                    <div>Team </div>
-                    <div>Score </div>
-                </div>
-                
-            </div> */}
+
         </>
     );
 }

@@ -18,7 +18,7 @@ function App() {
   return (
     <>
       <Router>
-        <div className="container">
+        <div className="container sm:max-w-xl md:max-w-3xl lg:max-w-4xl">
           <Header />
           <Routes>
             <Route path='/' element={<Home />} />
