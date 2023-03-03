@@ -1,66 +1,66 @@
 import * as NBALogos from "react-nba-logos";
 
-export const NBAIcon = ({ team }) => {
+export const NBAIcon = ({ team, size = 80 }) => {
     switch (team) {
         case "ATL":
-            return <NBALogos.ATL size={80} />;
+            return <NBALogos.ATL size={size} />;
         case "BKN":
-            return <NBALogos.BKN size={80} />;
+            return <NBALogos.BKN size={size} />;
         case "BOS":
-            return <NBALogos.BOS size={80} />;
+            return <NBALogos.BOS size={size} />;
         case "CHA":
-            return <NBALogos.CHA size={80} />;
+            return <NBALogos.CHA size={size} />;
         case "CHI":
-            return <NBALogos.CHI size={80} />;
+            return <NBALogos.CHI size={size} />;
         case "CLE":
-            return <NBALogos.CLE size={80} />;
+            return <NBALogos.CLE size={size} />;
         case "DAL":
-            return <NBALogos.DAL size={80} />;
+            return <NBALogos.DAL size={size} />;
         case "DEN":
-            return <NBALogos.DEN size={80} />;
+            return <NBALogos.DEN size={size} />;
         case "DET":
-            return <NBALogos.DET size={80} />;
+            return <NBALogos.DET size={size} />;
         case "GSW":
-            return <NBALogos.GSW size={80} />;
+            return <NBALogos.GSW size={size} />;
         case "HOU":
-            return <NBALogos.HOU size={80} />;
+            return <NBALogos.HOU size={size} />;
         case "IND":
-            return <NBALogos.IND size={80} />;
+            return <NBALogos.IND size={size} />;
         case "LAC":
-            return <NBALogos.LAC size={80} />;
+            return <NBALogos.LAC size={size} />;
         case "LAL":
-            return <NBALogos.LAL size={80} />;
+            return <NBALogos.LAL size={size} />;
         case "MEM":
-            return <NBALogos.MEM size={80} />;
+            return <NBALogos.MEM size={size} />;
         case "MIA":
-            return <NBALogos.MIA size={80} />;
+            return <NBALogos.MIA size={size} />;
         case "MIL":
-            return <NBALogos.MIL size={80} />;
+            return <NBALogos.MIL size={size} />;
         case "MIN":
-            return <NBALogos.MIN size={80} />;
+            return <NBALogos.MIN size={size} />;
         case "NOP":
-            return <NBALogos.NOP size={80} />;
+            return <NBALogos.NOP size={size} />;
         case "NYK":
-            return <NBALogos.NYK size={80} />;
+            return <NBALogos.NYK size={size} />;
         case "OKC":
-            return <NBALogos.OKC size={80} />;
+            return <NBALogos.OKC size={size} />;
         case "ORL":
-            return <NBALogos.ORL size={80} />;
+            return <NBALogos.ORL size={size} />;
         case "PHI":
-            return <NBALogos.PHI size={80} />;
+            return <NBALogos.PHI size={size} />;
         case "PHX":
-            return <NBALogos.PHX size={80} />;
+            return <NBALogos.PHX size={size} />;
         case "POR":
-            return <NBALogos.POR size={80} />;
+            return <NBALogos.POR size={size} />;
         case "SAC":
-            return <NBALogos.SAC size={80} />;
+            return <NBALogos.SAC size={size} />;
         case "SAS":
-            return <NBALogos.SAS size={80} />;
+            return <NBALogos.SAS size={size} />;
         case "TOR":
-            return <NBALogos.TOR size={80} />;
+            return <NBALogos.TOR size={size} />;
         case "UTA":
-            return <NBALogos.UTA size={80} />;
+            return <NBALogos.UTA size={size} />;
         case "WAS":
-            return <NBALogos.WAS size={80} />;
+            return <NBALogos.WAS size={size} />;
     }
 };

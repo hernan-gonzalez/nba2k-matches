@@ -9,8 +9,9 @@ import { NBATeams } from "../utils/nbaTeams";
 import { getUsers } from "../features/auth/authSlice";
 import { createBoxScore } from "../features/boxScores/boxScoresSlice";
 
-import { useForm } from "react-hook-form";
-
+import { useForm, Controller } from "react-hook-form";
+import { NBAIcon } from "../components/NBAIcon";
+import Select from "react-select";
 function NewBoxScore() {
     const { user, users } = useSelector((state) => state.auth);
     const { isLoading, isError, isSuccess, message } = useSelector(
@@ -32,7 +33,13 @@ function NewBoxScore() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { register, handleSubmit, formState: { errors }, getValues } = useForm();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        control,
+        getValues,
+    } = useForm();
 
     useEffect(() => {
         dispatch(getUsers());
@@ -51,7 +58,6 @@ function NewBoxScore() {
     }, [dispatch, isError, isSuccess, navigate, message]);
 
     const onSubmit = (data) => {
-
         dispatch(createBoxScore(getFormData(data)));
     };
 
@@ -60,30 +66,46 @@ function NewBoxScore() {
             return {
                 home: {
                     user: user._id,
-                    team: data.currentUserTeam,
+                    team: data.currentUserTeam.value,
                     score: parseInt(data.currentUserScore),
-                    outcome: parseInt(data.currentUserScore) > parseInt(data.oponentUserScore) ? "W" : "L"
+                    outcome:
+                        parseInt(data.currentUserScore) >
+                        parseInt(data.oponentUserScore)
+                            ? "W"
+                            : "L",
                 },
                 away: {
                     user: data.oponentUserGamerTag,
-                    team: data.oponentUserTeam,
+                    team: data.oponentUserTeam.value,
                     score: parseInt(data.oponentUserScore),
-                    outcome: parseInt(data.oponentUserScore) > parseInt(data.currentUserScore) ? "W" : "L"
+                    outcome:
+                        parseInt(data.oponentUserScore) >
+                        parseInt(data.currentUserScore)
+                            ? "W"
+                            : "L",
                 },
             };
         }
         return {
             away: {
                 user: user._id,
-                team: data.currentUserTeam,
+                team: data.currentUserTeam.value,
                 score: parseInt(data.currentUserScore),
-                outcome: parseInt(data.currentUserScore) > parseInt(data.oponentUserScore) ? "W" : "L"
+                outcome:
+                    parseInt(data.currentUserScore) >
+                    parseInt(data.oponentUserScore)
+                        ? "W"
+                        : "L",
             },
             home: {
                 user: data.oponentUserGamerTag,
-                team: data.oponentUserTeam,
+                team: data.oponentUserTeam.value,
                 score: parseInt(data.oponentUserScore),
-                outcome: parseInt(data.oponentUserScore) > parseInt(data.currentUserScore) ? "W" : "L"
+                outcome:
+                    parseInt(data.oponentUserScore) >
+                    parseInt(data.currentUserScore)
+                        ? "W"
+                        : "L",
             },
         };
     };
@@ -91,6 +113,13 @@ function NewBoxScore() {
     if (isLoading) {
         return <Spinner />;
     }
+
+    const formatOptionLabel = ({ value, label, logo }) => (
+        <div style={{ display: "flex" }}>
+            <div>{label}</div>
+            <div style={{ marginLeft: "10px", color: "#ccc" }}>{logo}</div>
+        </div>
+    );
 
     return (
         <>
@@ -110,76 +139,99 @@ function NewBoxScore() {
                         readOnly
                     />
                 </div>
-
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="form-group">
                         <label htmlFor="currentUserTeam">Team</label>
-                        <select
-                            {...register("currentUserTeam")}
-
-                        >
-                            {NBATeams.map((team, index) => (
-                                <option key={team} value={team}>
-                                    {team}
-                                </option>
-                            ))}
-                        </select>
+                        <Controller
+                            name="currentUserTeam"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <Select
+                                    placeholder="Choose team"
+                                    {...field}
+                                    formatOptionLabel={formatOptionLabel}
+                                    options={NBATeams.map((team) => ({
+                                        value: team,
+                                        name: team,
+                                        label: team,
+                                        logo: <NBAIcon team={team} size={30} />,
+                                    }))}
+                                />
+                            )}
+                        />
                     </div>
                     <div className="form-group">
                         <label htmlFor="currentUserScore">Score</label>
                         <input
                             type="number"
                             className="form-control"
-                            {...register("currentUserScore", { required: true, min: 1 })}
-
+                            {...register("currentUserScore", {
+                                required: true,
+                                min: 1,
+                            })}
                         />
                     </div>
                     <div className="form-group">
                         <label htmlFor="homecourt">Team</label>
-                        <select
-                            {...register("homecourt",)}
-
-                        >
-                            <option key={"away"} value="away">Away</option>
-                            <option key={"home"} value="home">Home</option>
+                        <select {...register("homecourt")}>
+                            <option key={"away"} value="away">
+                                Away
+                            </option>
+                            <option key={"home"} value="home">
+                                Home
+                            </option>
                         </select>
                     </div>
                     <hr />
                     <div className="form-group">Opponent</div>
                     <div className="form-group">
-                        <label htmlFor="Opponent gametag">Opponent gametag</label>
+                        <label htmlFor="Opponent gametag">
+                            Opponent gametag
+                        </label>
                         <select
-                            {...register("oponentUserGamerTag", { required: true })}
+                            {...register("oponentUserGamerTag", {
+                                required: true,
+                            })}
                             name="oponentUserGamerTag"
                             id="oponentUserGamerTag"
-
                         >
-                            {
-                                users.map((user) => (
-                                    <option key={user.id} value={user._id}>
-                                        {user.psnUserName}
-                                    </option>
-                                ))
-                            }
+                            {users.map((user) => (
+                                <option key={user.id} value={user._id}>
+                                    {user.psnUserName}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     <div className="form-group">
                         <label htmlFor="oponentUserTeam">Team</label>
-                        <select
-
-                            {...register("oponentUserTeam", { required: true })}
+                        <Controller
                             name="oponentUserTeam"
-                        >
-                            {NBATeams.map((team, index) => (
-                                <option key={team} value={team}>{team}</option>
-                            ))}
-                        </select>
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <Select
+                                    placeholder="Choose team"
+                                    {...field}
+                                    formatOptionLabel={formatOptionLabel}
+                                    options={NBATeams.map((team) => ({
+                                        value: team,
+                                        name: team,
+                                        label: team,
+                                        logo: <NBAIcon team={team} size={30} />,
+                                    }))}
+                                />
+                            )}
+                        />
                     </div>
                     <div className="form-group">
                         <label htmlFor="oponentUserScore">Score</label>
                         <input
                             type="number"
-                            {...register("oponentUserScore", { required: true, min: 1 })}
+                            {...register("oponentUserScore", {
+                                required: true,
+                                min: 1,
+                            })}
                         />
                     </div>
                     <div className="form-group">
