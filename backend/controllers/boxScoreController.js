@@ -27,7 +27,26 @@ const createBoxScore = asyncHandler(async (req, res) => {
     res.status(201).json(boxScore)
 })
 
+//@desc Create new boxScores
+//@route GET /api/boxScores/record
+//@access Private
+const getPlayerRecord = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user.id)
+
+    if (!user) {
+        res.status(401)
+        throw new Error('User not found')
+    }
+
+    const wins = await BoxScore.countDocuments({ $or: [{ "home.user": req.user.id, "home.outcome": 'W' }, { "away.user": req.user.id, "away.outcome": 'W' }] });
+
+    const totalGames = await BoxScore.countDocuments({ $or: [{ "home.user": req.user.id }, { "away.user": req.user.id }] })
+
+    res.status(200).json({ wins, totalGames });
+})
+
 module.exports = {
     getBoxScores,
-    createBoxScore
+    createBoxScore,
+    getPlayerRecord
 }

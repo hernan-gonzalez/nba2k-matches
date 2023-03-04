@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -9,6 +9,9 @@ import { NBATeams } from "../utils/nbaTeams";
 import { getUsers } from "../features/auth/authSlice";
 import { createBoxScore } from "../features/boxScores/boxScoresSlice";
 
+import { useForm, Controller } from "react-hook-form";
+import { NBAIcon } from "../components/NBAIcon";
+import Select from "react-select";
 function NewBoxScore() {
     const { user, users } = useSelector((state) => state.auth);
     const { isLoading, isError, isSuccess, message } = useSelector(
@@ -17,22 +20,20 @@ function NewBoxScore() {
     const [currentUser] = useState(user.name);
     const [email] = useState(user.email);
     const [currentUserGamerTag] = useState(user.psnUserName);
-    const [currentUserTeam, setCurrentUserTeam] = useState("ATL");
-    const [currentUserScore, setCurrentUserScore] = useState(0);
-
-    const [oponentUserGamerTag, setOponentUserGamerTag] = useState(
-        users[0]?._id
-    );
-    const [homecourt, setHomeCourt] = useState("away");
-    const [oponentUserTeam, setOponentUserTeam] = useState("ATL");
-    const [oponentUserScore, setOponentUserScore] = useState(0);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        control,
+        getValues,
+    } = useForm();
+
     useEffect(() => {
         dispatch(getUsers());
-        setOponentUserGamerTag(users[0]?._id);
     }, []);
 
     useEffect(() => {
@@ -46,36 +47,55 @@ function NewBoxScore() {
         dispatch(reset());
     }, [dispatch, isError, isSuccess, navigate, message]);
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        dispatch(createBoxScore(getFormData()));
+    const onSubmit = (data) => {
+        dispatch(createBoxScore(getFormData(data)));
     };
 
-    const getFormData = () => {
-        if (homecourt === "home") {
+    const getFormData = (data) => {
+        if (data.homecourt.value === "home") {
             return {
                 home: {
                     user: user._id,
-                    team: currentUserTeam,
-                    score: currentUserScore,
+                    team: data.currentUserTeam.value,
+                    score: parseInt(data.currentUserScore),
+                    outcome:
+                        parseInt(data.currentUserScore) >
+                            parseInt(data.oponentUserScore)
+                            ? "W"
+                            : "L",
                 },
                 away: {
-                    user: oponentUserGamerTag,
-                    team: oponentUserTeam,
-                    score: oponentUserScore,
+                    user: data.oponentUserGamerTag.value,
+                    team: data.oponentUserTeam.value,
+                    score: parseInt(data.oponentUserScore),
+                    outcome:
+                        parseInt(data.oponentUserScore) >
+                            parseInt(data.currentUserScore)
+                            ? "W"
+                            : "L",
                 },
             };
         }
         return {
             away: {
                 user: user._id,
-                team: currentUserTeam,
-                score: currentUserScore,
+                team: data.currentUserTeam.value,
+                score: parseInt(data.currentUserScore),
+                outcome:
+                    parseInt(data.currentUserScore) >
+                        parseInt(data.oponentUserScore)
+                        ? "W"
+                        : "L",
             },
             home: {
-                user: oponentUserGamerTag,
-                team: oponentUserTeam,
-                score: oponentUserScore,
+                user: data.oponentUserGamerTag.value,
+                team: data.oponentUserTeam.value,
+                score: parseInt(data.oponentUserScore),
+                outcome:
+                    parseInt(data.oponentUserScore) >
+                        parseInt(data.currentUserScore)
+                        ? "W"
+                        : "L",
             },
         };
     };
@@ -83,6 +103,13 @@ function NewBoxScore() {
     if (isLoading) {
         return <Spinner />;
     }
+
+    const formatOptionLabel = ({ value, label, logo }) => (
+        <div style={{ display: "flex" }}>
+            <div>{logo}</div>
+            <div style={{ display: "flex", alignItems: "center" }}>{label}</div>
+        </div>
+    );
 
     return (
         <>
@@ -99,88 +126,118 @@ function NewBoxScore() {
                         type="text"
                         className="form-control"
                         value={currentUserGamerTag}
-                        disabled
+                        readOnly
                     />
                 </div>
-
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="form-group">
                         <label htmlFor="currentUserTeam">Team</label>
-                        <select
+                        <Controller
                             name="currentUserTeam"
-                            id="currentUserTeam"
-                            value={currentUserTeam}
-                            onChange={(e) => setCurrentUserTeam(e.target.value)}
-                        >
-                            {NBATeams.map((team) => (
-                                <option key={team} value={team}>
-                                    {team}
-                                </option>
-                            ))}
-                        </select>
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <Select
+                                    placeholder="Choose team"
+                                    {...field}
+                                    formatOptionLabel={formatOptionLabel}
+                                    options={NBATeams.map((team) => ({
+                                        value: team,
+                                        name: team,
+                                        label: team,
+                                        logo: <NBAIcon team={team} size={30} />,
+                                    }))}
+                                />
+                            )}
+                        />
                     </div>
                     <div className="form-group">
                         <label htmlFor="currentUserScore">Score</label>
                         <input
                             type="number"
                             className="form-control"
-                            onChange={(e) =>
-                                setCurrentUserScore(e.target.value)
-                            }
+                            {...register("currentUserScore", {
+                                required: true,
+                                min: 1,
+                            })}
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="homecourt">Team</label>
-                        <select
+                        <label htmlFor="homecourt">Court</label>
+                        <Controller
                             name="homecourt"
-                            id="homecourt"
-                            value={homecourt}
-                            onChange={(e) => setHomeCourt(e.target.value)}
-                        >
-                            <option key={"away"} value="away">Away</option>
-                            <option key={"home"} value="home">Home</option>
-                        </select>
+                            control={control}
+                            rules={{ required: true }}
+                            defaultValue={{ value: 'away', label: 'Away' }}
+                            render={({ field }) => (
+                                <Select
+                                    placeholder="Choose court"
+                                    {...field}
+                                    formatOptionLabel={formatOptionLabel}
+
+                                    options={[
+                                        { value: 'away', label: 'Away' },
+                                        { value: 'home', label: 'Home' }
+                                    ]}
+                                />
+                            )}
+                        />
                     </div>
                     <hr />
                     <div className="form-group">Opponent</div>
                     <div className="form-group">
-                        <label htmlFor="name">Opponent gametag</label>
-                        <select
+                        <label htmlFor="Opponent gametag">
+                            Opponent gametag
+                        </label>
+                        <Controller
                             name="oponentUserGamerTag"
-                            id="oponentUserGamerTag"
-                            value={oponentUserGamerTag}
-                            onChange={(e) =>
-                                setOponentUserGamerTag(e.target.value)
-                            }
-                        >
-                            {users.map((user) => (
-                                <option key={user.id} value={user.id}>
-                                    {user.psnUserName}
-                                </option>
-                            ))}
-                        </select>
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <Select
+                                    placeholder="Choose opponent"
+                                    {...field}
+                                    formatOptionLabel={formatOptionLabel}
+                                    options={users.map((user) => ({
+                                        value: user._id,
+                                        name: user.psnUserName,
+                                        label: user.psnUserName,
+                                    }))}
+                                />
+                            )} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="oponentUserTeam">Team</label>
-                        <select
+                        <Controller
                             name="oponentUserTeam"
-                            id="oponentUserTeam"
-                            value={oponentUserTeam}
-                            onChange={(e) => setOponentUserTeam(e.target.value)}
-                        >
-                            {NBATeams.map((team) => (
-                                <option value={team}>{team}</option>
-                            ))}
-                        </select>
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <Select
+                                    placeholder="Choose team"
+                                    {...field}
+                                    formatOptionLabel={formatOptionLabel}
+                                    options={NBATeams.map((team) => ({
+                                        value: team,
+                                        name: team,
+                                        label: team,
+                                        logo: <NBAIcon team={team} size={30} />,
+                                    }))}
+                                />
+                            )}
+                        />
                     </div>
                     <div className="form-group">
                         <label htmlFor="oponentUserScore">Score</label>
                         <input
                             type="number"
-                            className="form-control"
-                            onChange={(e) =>
-                                setOponentUserScore(e.target.value)
-                            }
+                            {...register("oponentUserScore", {
+                                required: true,
+                                min: 1,
+                                validate: {
+                                    differentScore: value => parseInt(value) !== parseInt(getValues().currentUserScore),
+                                }
+                            })}
                         />
                     </div>
                     <div className="form-group">

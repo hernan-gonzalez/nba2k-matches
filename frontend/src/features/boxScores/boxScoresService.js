@@ -41,12 +41,26 @@ const getBoxScore = async (boxScoreID, token) => {
     return response.data
 }
 
+//Get Record
+const getPlayerRecord = async (token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.get(API_URL + '/record', config)
+
+    return response.data
+}
+
 
 
 const boxScoresService = {
     createBoxScore,
     getBoxScores,
     getBoxScore,
+    getPlayerRecord
 }
 
 export default boxScoresService;

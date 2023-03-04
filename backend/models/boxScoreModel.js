@@ -15,6 +15,10 @@ const boxScoreSchema = mongoose.Schema(
             score: {
                 type: Number,
                 required: [true, 'Please enter the score']
+            },
+            outcome: {
+                type: String,
+                required: [true, 'Please enter the outcome']
             }
         },
         away: {
@@ -30,6 +34,10 @@ const boxScoreSchema = mongoose.Schema(
             score: {
                 type: Number,
                 required: [true, 'Please enter the score']
+            },
+            outcome: {
+                type: String,
+                required: [true, 'Please enter the outcome']
             }
         }
     },

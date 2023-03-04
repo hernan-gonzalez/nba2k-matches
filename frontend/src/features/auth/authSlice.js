@@ -2,8 +2,20 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./authService";
 
 //Get user from localstorage
-const user = JSON.parse(localStorage.getItem('user'))
+let user = JSON.parse(localStorage.getItem('user'))
+const parseJwt = (token) => {
+    try {
+        return JSON.parse(atob(token.split(".")[1]));
+    } catch (e) {
+        return null;
+    }
+};
 
+const isTokenExpired = (user) => {
+    const decodedJwt = parseJwt(user.token);
+    return decodedJwt.exp * 1000 < Date.now();
+
+}
 
 const initialState = {
     user: user ? user : null,
@@ -47,6 +59,10 @@ export const logout = createAsyncThunk('auth/logout', async () => {
     await authService.logout()
 })
 
+
+export const getLocalUser = createAsyncThunk('auth/getLocalUser', async () => {
+    user = JSON.parse(localStorage.getItem('user'))
+})
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -56,7 +72,6 @@ export const authSlice = createSlice({
             state.isError = false
             state.isSuccess = false
             state.message = ''
-
         }
     },
     extraReducers: (builder) => {
@@ -105,6 +120,9 @@ export const authSlice = createSlice({
                 state.isError = true
                 state.users = []
                 state.message = action.payload
+            })
+            .addCase(getLocalUser.fulfilled, (state, action) => {
+                state.user = user && !isTokenExpired(user) ? user : null
             })
     }
 })

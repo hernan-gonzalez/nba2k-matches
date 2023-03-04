@@ -15,27 +15,39 @@ function Header() {
     };
     return (
         <header className="header">
-            <div className="logo">
-                <Link to="/">NBA 2k23</Link>
+            <div className="flex space-x-2">
+                <Link to="/">NBA 2k23 Game Log</Link>
             </div>
             <ul>
                 {user ? (
-                    <li>
-                        <button className="btn" onClick={onLogout}>
-                            <FaSignOutAlt /> Logout
-                        </button>
-                    </li>
+                    <div className="flex flex-row">
+                        <div className="my-auto bg-gray-300 rounded rounded-xl p-2">
+                            <div className="font-bold">{user.psnUserName}</div>
+                        </div>
+                        <li>
+                            <div className="flex justify-center content-center align-items-center bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded" onClick={onLogout}>
+                                <FaSignOutAlt className="my-auto mx-2" />
+                                <div className="div">Logout</div>
+                            </div>
+                        </li>
+                    </div>
+
                 ) : (
                     <>
                         <li>
-                            <Link to="/login">
-                                <FaSignInAlt /> Login
+                            <Link className="flex group justify-center content-center align-items-center bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded" to="/login">
+                                <FaSignInAlt className="group-hover:text-white" />
+                                <div className="group-hover:text-white">Login</div>
                             </Link>
+
                         </li>
                         <li>
-                            <Link to="/register">
-                                <FaUser /> Register
+                            <Link className="flex group justify-center content-center align-items-center bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded" to="/register">
+                                <FaUser className="group-hover:text-white" />
+                                <div className="group-hover:text-white">Register</div>
                             </Link>
+
+
                         </li>
                     </>
                 )}

@@ -3,6 +3,7 @@ import boxScoresService from './boxScoresService'
 
 const initialState = {
     boxScores: [],
+    record: { wins: 0, totalGames: 0 },
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -36,6 +37,32 @@ export const getBoxScore = createAsyncThunk('boxScores/get', async (ticketId, th
     try {
         const token = thunkApi.getState().auth.user.token
         return await boxScoresService.getBoxScore(ticketId, token)
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkApi.rejectWithValue(message)
+    }
+})
+
+//Get player record
+
+export const getPlayerRecord = createAsyncThunk('boxScores/record', async (_, thunkApi) => {
+    try {
+        const token = thunkApi.getState().auth.user.token
+        return await boxScoresService.getPlayerRecord(token)
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+        return thunkApi.rejectWithValue(message)
+    }
+})
+
+export const getBoxScoresWithPlayerRecord = createAsyncThunk('/boxscores/wRecord', async (_, thunkApi) => {
+    try {
+        const token = thunkApi.getState().auth.user.token
+        const [boxscores, record] = await Promise.all([
+            boxScoresService.getBoxScores(token),
+            boxScoresService.getPlayerRecord(token)
+        ])
+        return { boxscores, record }
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
         return thunkApi.rejectWithValue(message)
@@ -89,8 +116,35 @@ export const boxScoresSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
             })
+            .addCase(getPlayerRecord.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getPlayerRecord.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.playerRecord = action.payload
+            })
+            .addCase(getPlayerRecord.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            .addCase(getBoxScoresWithPlayerRecord.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getBoxScoresWithPlayerRecord.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.boxScores = action.payload.boxscores
+                state.record = action.payload.record
+            })
+            .addCase(getBoxScoresWithPlayerRecord.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
     }
-
+    //getBoxScoresWithPlayerRecord
 })
 
 export const { reset } = boxScoresSlice.actions
