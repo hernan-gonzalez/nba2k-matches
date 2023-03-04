@@ -20,15 +20,6 @@ function NewBoxScore() {
     const [currentUser] = useState(user.name);
     const [email] = useState(user.email);
     const [currentUserGamerTag] = useState(user.psnUserName);
-    const [currentUserTeam, setCurrentUserTeam] = useState("ATL");
-    const [currentUserScore, setCurrentUserScore] = useState(0);
-
-    const [oponentUserGamerTag, setOponentUserGamerTag] = useState(
-        users[0]?._id
-    );
-    const [homecourt, setHomeCourt] = useState("away");
-    const [oponentUserTeam, setOponentUserTeam] = useState("ATL");
-    const [oponentUserScore, setOponentUserScore] = useState(0);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -43,7 +34,6 @@ function NewBoxScore() {
 
     useEffect(() => {
         dispatch(getUsers());
-        setOponentUserGamerTag(users[0]?._id);
     }, []);
 
     useEffect(() => {
@@ -58,11 +48,12 @@ function NewBoxScore() {
     }, [dispatch, isError, isSuccess, navigate, message]);
 
     const onSubmit = (data) => {
-        dispatch(createBoxScore(getFormData(data)));
+        console.log(getFormData(data))
+        // dispatch(createBoxScore(getFormData(data)));
     };
 
     const getFormData = (data) => {
-        if (homecourt === "home") {
+        if (data.homecourt.value === "home") {
             return {
                 home: {
                     user: user._id,
@@ -70,17 +61,17 @@ function NewBoxScore() {
                     score: parseInt(data.currentUserScore),
                     outcome:
                         parseInt(data.currentUserScore) >
-                        parseInt(data.oponentUserScore)
+                            parseInt(data.oponentUserScore)
                             ? "W"
                             : "L",
                 },
                 away: {
-                    user: data.oponentUserGamerTag,
+                    user: data.oponentUserGamerTag.value,
                     team: data.oponentUserTeam.value,
                     score: parseInt(data.oponentUserScore),
                     outcome:
                         parseInt(data.oponentUserScore) >
-                        parseInt(data.currentUserScore)
+                            parseInt(data.currentUserScore)
                             ? "W"
                             : "L",
                 },
@@ -93,17 +84,17 @@ function NewBoxScore() {
                 score: parseInt(data.currentUserScore),
                 outcome:
                     parseInt(data.currentUserScore) >
-                    parseInt(data.oponentUserScore)
+                        parseInt(data.oponentUserScore)
                         ? "W"
                         : "L",
             },
             home: {
-                user: data.oponentUserGamerTag,
+                user: data.oponentUserGamerTag.value,
                 team: data.oponentUserTeam.value,
                 score: parseInt(data.oponentUserScore),
                 outcome:
                     parseInt(data.oponentUserScore) >
-                    parseInt(data.currentUserScore)
+                        parseInt(data.currentUserScore)
                         ? "W"
                         : "L",
             },
@@ -116,8 +107,8 @@ function NewBoxScore() {
 
     const formatOptionLabel = ({ value, label, logo }) => (
         <div style={{ display: "flex" }}>
-            <div>{label}</div>
-            <div style={{ marginLeft: "10px", color: "#ccc" }}>{logo}</div>
+            <div>{logo}</div>
+            <div style={{ display: "flex", alignItems: "center" }}>{label}</div>
         </div>
     );
 
@@ -173,15 +164,24 @@ function NewBoxScore() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="homecourt">Team</label>
-                        <select {...register("homecourt")}>
-                            <option key={"away"} value="away">
-                                Away
-                            </option>
-                            <option key={"home"} value="home">
-                                Home
-                            </option>
-                        </select>
+                        <label htmlFor="homecourt">Court</label>
+                        <Controller
+                            name="homecourt"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <Select
+                                    placeholder="Choose court"
+                                    {...field}
+                                    formatOptionLabel={formatOptionLabel}
+                                    defaultValue={{ value: 'away', label: 'Away' }}
+                                    options={[
+                                        { value: 'away', label: 'Away' },
+                                        { value: 'home', label: 'Home' }
+                                    ]}
+                                />
+                            )}
+                        />
                     </div>
                     <hr />
                     <div className="form-group">Opponent</div>
@@ -189,19 +189,22 @@ function NewBoxScore() {
                         <label htmlFor="Opponent gametag">
                             Opponent gametag
                         </label>
-                        <select
-                            {...register("oponentUserGamerTag", {
-                                required: true,
-                            })}
+                        <Controller
                             name="oponentUserGamerTag"
-                            id="oponentUserGamerTag"
-                        >
-                            {users.map((user) => (
-                                <option key={user.id} value={user._id}>
-                                    {user.psnUserName}
-                                </option>
-                            ))}
-                        </select>
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <Select
+                                    placeholder="Choose opponent"
+                                    {...field}
+                                    formatOptionLabel={formatOptionLabel}
+                                    options={users.map((user) => ({
+                                        value: user._id,
+                                        name: user.psnUserName,
+                                        label: user.psnUserName,
+                                    }))}
+                                />
+                            )} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="oponentUserTeam">Team</label>
@@ -231,6 +234,9 @@ function NewBoxScore() {
                             {...register("oponentUserScore", {
                                 required: true,
                                 min: 1,
+                                validate: {
+                                    differentScore: value => parseInt(value) !== parseInt(getValues().currentUserScore),
+                                }
                             })}
                         />
                     </div>

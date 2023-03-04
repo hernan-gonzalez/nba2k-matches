@@ -61,7 +61,6 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 
 
 export const getLocalUser = createAsyncThunk('auth/getLocalUser', async () => {
-    console.log('dispatched')
     user = JSON.parse(localStorage.getItem('user'))
 })
 export const authSlice = createSlice({
