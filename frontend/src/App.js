@@ -5,14 +5,12 @@ import PrivateRoute from './components/PrivateRoute'
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import NewTicket from './pages/NewTicket';
-import Tickets from './pages/Tickets';
 import Ticket from './pages/Ticket';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
-import BoxScores from './pages/BoxScores';
+import BoxScoresTable from './pages/BoxScoresTable';
 import NewBoxScore from './pages/NewBoxScore';
-import BoxScoresNew from './pages/BoxScoresNew';
+import BoxScores from './pages/BoxScores';
 
 function App() {
   return (
@@ -27,11 +25,11 @@ function App() {
             <Route path='/new-boxscore' element={<PrivateRoute />} >
               <Route path='/new-boxscore' element={<NewBoxScore />} />
             </Route>
+            <Route path='/boxScoresTable' element={<PrivateRoute />} >
+              <Route path='/boxScoresTable' element={<BoxScoresTable />} />
+            </Route>
             <Route path='/boxScores' element={<PrivateRoute />} >
               <Route path='/boxScores' element={<BoxScores />} />
-            </Route>
-            <Route path='/boxScoresNew' element={<PrivateRoute />} >
-              <Route path='/boxScoresNew' element={<BoxScoresNew />} />
             </Route>
             <Route path='/ticket/:ticketId' element={<PrivateRoute />} >
               <Route path='/ticket/:ticketId' element={<Ticket />} />

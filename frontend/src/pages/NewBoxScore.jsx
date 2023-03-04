@@ -48,8 +48,7 @@ function NewBoxScore() {
     }, [dispatch, isError, isSuccess, navigate, message]);
 
     const onSubmit = (data) => {
-        console.log(getFormData(data))
-        // dispatch(createBoxScore(getFormData(data)));
+        dispatch(createBoxScore(getFormData(data)));
     };
 
     const getFormData = (data) => {
@@ -169,12 +168,13 @@ function NewBoxScore() {
                             name="homecourt"
                             control={control}
                             rules={{ required: true }}
+                            defaultValue={{ value: 'away', label: 'Away' }}
                             render={({ field }) => (
                                 <Select
                                     placeholder="Choose court"
                                     {...field}
                                     formatOptionLabel={formatOptionLabel}
-                                    defaultValue={{ value: 'away', label: 'Away' }}
+
                                     options={[
                                         { value: 'away', label: 'Away' },
                                         { value: 'home', label: 'Home' }
