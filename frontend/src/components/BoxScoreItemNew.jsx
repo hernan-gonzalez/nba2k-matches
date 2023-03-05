@@ -5,8 +5,7 @@ function BoxScoreItemNew({ boxScore }) {
             <div className="flex font-thin text-xs">
                 {boxScore.createdAt.split("T")[0]}
             </div>
-
-            <div className="h-84 flex w-64 flex-col items-center justify-center space-y-2 rounded-lg bg-gray-100 md:h-36 md:w-96 md:flex-row md:space-y-0">
+            <div className="h-36 w-72 flex items-center justify-center space-x-4 rounded-lg bg-gray-100 md:h-36 md:w-96">
                 <div className="flex w-1/2 flex-row justify-center py-2">
                     <div className="flex flex-col items-center justify-center rounded-md p-2">
                         <div className="text-sm">Home</div>

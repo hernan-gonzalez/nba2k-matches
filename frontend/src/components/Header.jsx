@@ -15,17 +15,17 @@ function Header() {
     };
     return (
         <header className="header">
-            <div className="flex space-x-2">
-                <Link to="/">NBA 2k23 Game Log</Link>
+            <div className="flex w-24">
+                <Link to="/">NBA 2k Game Log</Link>
             </div>
             <ul>
                 {user ? (
                     <div className="flex flex-row">
-                        <div className="my-auto bg-gray-300 rounded rounded-xl p-2">
-                            <div className="font-bold">{user.psnUserName}</div>
+                        <div className="flex justify-center content-center align-items-center py-2 bg-transparent text-gray-700 font-semibold">
+                            <div >{user.psnUserName}</div>
                         </div>
                         <li>
-                            <div className="flex justify-center content-center align-items-center bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded" onClick={onLogout}>
+                            <div className="flex justify-center content-center align-items-center bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white px-2 border border-gray-500 hover:border-transparent rounded" onClick={onLogout}>
                                 <FaSignOutAlt className="my-auto mx-2" />
                                 <div className="div">Logout</div>
                             </div>
@@ -35,14 +35,14 @@ function Header() {
                 ) : (
                     <>
                         <li>
-                            <Link className="flex group justify-center content-center align-items-center bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded" to="/login">
+                            <Link className="flex group justify-center content-center align-items-center bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white px-2 border border-gray-500 hover:border-transparent rounded" to="/login">
                                 <FaSignInAlt className="group-hover:text-white" />
                                 <div className="group-hover:text-white">Login</div>
                             </Link>
 
                         </li>
                         <li>
-                            <Link className="flex group justify-center content-center align-items-center bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded" to="/register">
+                            <Link className="flex group justify-center content-center align-items-center bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white px-2 border border-gray-500 hover:border-transparent rounded" to="/register">
                                 <FaUser className="group-hover:text-white" />
                                 <div className="group-hover:text-white">Register</div>
                             </Link>
