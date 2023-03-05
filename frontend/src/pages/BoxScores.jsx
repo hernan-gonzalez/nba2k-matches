@@ -39,8 +39,8 @@ function BoxScores() {
     return (
         <>
             <BackButton url="/" />
-            <h1>Recent Matches</h1>
-            <div className="flex flex-col mx-auto justify-center align-center bg-gray-300 w-48 rounded">
+            <h1 className="flex relative justify-center">Recent Matches</h1>
+            <div className="flex flex-col w-44 mx-auto justify-center content-center align-items-center bg-transparent text-gray-700 font-semibold px-2 border border-gray-500 rounded">
                 <div className="">All time record</div>
                 <div className="">{record.wins + '-' + (record.totalGames - record.wins)}</div>
             </div>
