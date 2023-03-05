@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = '/api/boxscore'
+const API_URL = process.env.REACT_APP_BACKEND_HOST + '/api/boxscore'
 
 //Create new boxScore
 const createBoxScore = async (boxScoreData, token) => {

@@ -1,20 +1,16 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
-const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST || 'localhost';
-const BACKEND_PORT = process.env.BACKEND_PORT || 5000;
+const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST || 'http://localhost:5000';
 
 module.exports = function (app) {
 
     app.use(
-        '/api/',
+        '/api/*',
         createProxyMiddleware({
-            target: target,
+            target: BACKEND_HOST,
             changeOrigin: true,
             logLevel: 'debug'
         })
     );
 
-    /**
-    *   You can create other proxies using app.use() method.
-    */
 };
