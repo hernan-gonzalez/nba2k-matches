@@ -8,7 +8,7 @@ module.exports = function (app) {
     app.use(
         '/api/*',
         createProxyMiddleware({
-            target: BACKEND_HOST + ":" + BACKEND_PORT,
+            target: BACKEND_HOST,
             changeOrigin: true,
             logLevel: 'debug'
         })
