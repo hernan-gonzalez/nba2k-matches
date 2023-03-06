@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate-v2')
 
 const boxScoreSchema = mongoose.Schema(
     {
@@ -44,5 +45,7 @@ const boxScoreSchema = mongoose.Schema(
     {
         timestamps: true,
     })
+
+boxScoreSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('BoxScore', boxScoreSchema)

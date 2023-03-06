@@ -19,6 +19,35 @@ const getBoxScores = asyncHandler(async (req, res) => {
     res.status(200).json(boxScores)
 })
 
+//@desc Get user boxScores
+//@route GET /api/boxscores
+//@access Private
+const getBoxScoresPaginated = asyncHandler(async (req, res) => {
+    //Get user using the id in the JWT
+    const user = await User.findById(req.user.id)
+    if (!user) {
+        res.status(401)
+        throw new Error('User not found')
+    }
+
+    var query = { $or: [{ 'home.user': req.user.id }, { 'away.user': req.user.id }] };
+    var options = {
+        sort: { createdAt: -1 },
+        page: 1,
+        limit: 10,
+        populate: [{
+            path: 'home.user',
+            select: 'psnUserName'
+        }, {
+            path: 'away.user',
+            select: 'psnUserName'
+        }],
+    };
+    // const boxScores = await BoxScore.paginate().find({ $or: [{ 'home.user': req.user.id }, { 'away.user': req.user.id }] }).populate('home.user', 'psnUserName').populate('away.user', 'psnUserName').sort({ createdAt: -1 });
+    const boxScores = await BoxScore.paginate(query, options).then();
+    res.status(200).json(boxScores)
+})
+
 //@desc Create new boxScores
 //@route POST /api/boxScores
 //@access Private
@@ -48,5 +77,6 @@ const getPlayerRecord = asyncHandler(async (req, res) => {
 module.exports = {
     getBoxScores,
     createBoxScore,
-    getPlayerRecord
+    getPlayerRecord,
+    getBoxScoresPaginated
 }
