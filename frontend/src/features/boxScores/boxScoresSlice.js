@@ -59,7 +59,7 @@ export const getBoxScoresWithPlayerRecord = createAsyncThunk('/boxscores/wRecord
     try {
         const token = thunkApi.getState().auth.user.token
         const [boxscores, record] = await Promise.all([
-            boxScoresService.getBoxScores(token),
+            boxScoresService.getBoxScoresPaginated(1, token),
             boxScoresService.getPlayerRecord(token)
         ])
         return { boxscores, record }
@@ -135,7 +135,7 @@ export const boxScoresSlice = createSlice({
             .addCase(getBoxScoresWithPlayerRecord.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSuccess = true
-                state.boxScores = action.payload.boxscores
+                state.boxScores = action.payload.boxscores.docs
                 state.record = action.payload.record
             })
             .addCase(getBoxScoresWithPlayerRecord.rejected, (state, action) => {

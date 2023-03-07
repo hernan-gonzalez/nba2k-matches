@@ -33,7 +33,7 @@ const getBoxScoresPaginated = asyncHandler(async (req, res) => {
     var query = { $or: [{ 'home.user': req.user.id }, { 'away.user': req.user.id }] };
     var options = {
         sort: { createdAt: -1 },
-        page: 1,
+        page: req.query.page || 1,
         limit: 10,
         populate: [{
             path: 'home.user',

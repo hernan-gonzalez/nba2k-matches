@@ -28,6 +28,22 @@ const getBoxScores = async (token) => {
     return response.data
 }
 
+//Get BoxScores
+const getBoxScoresPaginated = async (page, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        params: {
+            page: page
+        }
+    }
+
+    const response = await axios.get(API_URL + "/paginated", config)
+
+    return response.data
+}
+
 //Get boxScore
 const getBoxScore = async (boxScoreID, token) => {
     const config = {
@@ -60,7 +76,8 @@ const boxScoresService = {
     createBoxScore,
     getBoxScores,
     getBoxScore,
-    getPlayerRecord
+    getPlayerRecord,
+    getBoxScoresPaginated
 }
 
 export default boxScoresService;
