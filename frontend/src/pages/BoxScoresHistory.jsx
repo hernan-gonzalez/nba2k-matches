@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import Spinner from "../components/Spinner";
 import BackButton from "../components/BackButton";
 import { getBoxScores, reset } from "../features/boxScores/boxScoresSlice";
-import BoxScoreItem from "../components/BoxScoreItem";
+import BoxScoreTableItem from "../components/BoxScoreTableItem";
 
-function BoxScoresTable() {
-    const { boxScores, isLoading, isSuccess, isError } = useSelector(
+function BoxScoresHistory() {
+    const { boxScores, isLoading, isSuccess } = useSelector(
         (state) => state.boxScores
     );
 
@@ -62,11 +62,11 @@ function BoxScoresTable() {
                     <div>Score </div>
                 </div>
                 {boxScores.map((boxScore) => (
-                    <BoxScoreItem key={boxScore._id} boxScore={boxScore} />
+                    <BoxScoreTableItem key={boxScore._id} boxScore={boxScore} />
                 ))}
             </div>
         </>
     );
 }
 
-export default BoxScoresTable;
+export default BoxScoresHistory;

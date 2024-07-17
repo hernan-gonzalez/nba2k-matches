@@ -144,7 +144,6 @@ export const boxScoresSlice = createSlice({
                 state.message = action.payload
             })
     }
-    //getBoxScoresWithPlayerRecord
 })
 
 export const { reset } = boxScoresSlice.actions
