@@ -2,23 +2,22 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createTicket, reset } from "../features/tickets/ticketSlice";
 import Spinner from "../components/Spinner";
 import BackButton from "../components/BackButton";
 import { NBATeams } from "../utils/nbaTeams";
 import { getUsers } from "../features/auth/authSlice";
 import { createBoxScore } from "../features/boxScores/boxScoresSlice";
-
+import { reset } from "../features/boxScores/boxScoresSlice";
 import { useForm, Controller } from "react-hook-form";
 import { NBAIcon } from "../components/NBAIcon";
 import Select from "react-select";
+
 function NewBoxScore() {
     const { user, users } = useSelector((state) => state.auth);
     const { isLoading, isError, isSuccess, message } = useSelector(
         (state) => state.boxScores
     );
-    const [currentUser] = useState(user.name);
-    const [email] = useState(user.email);
+
     const [currentUserGamerTag] = useState(user.psnUserName);
 
     const dispatch = useDispatch();
@@ -27,14 +26,13 @@ function NewBoxScore() {
     const {
         register,
         handleSubmit,
-        formState: { errors },
         control,
         getValues,
     } = useForm();
 
     useEffect(() => {
         dispatch(getUsers());
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         if (isError) {

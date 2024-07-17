@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { FaTicketAlt, FaBasketballBall, FaBox } from 'react-icons/fa'
+import { FaBasketballBall, FaBox } from 'react-icons/fa'
 
 function Home() {
     return (
@@ -10,7 +10,7 @@ function Home() {
             </section>
 
             <div className="flex flex-row space-x-4 justify-center">
-                <Link className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold p-4 rounded" to='/new-boxscore' >
+                <Link className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold p-4 rounded" to='/newBoxscore' >
                     <FaBasketballBall className="my-auto" /> <div className="px-2">Add a match</div>
                 </Link>
                 <Link className="flex bg-gray-500 hover:bg-gray-700 text-white font-bold p-4 rounded" to='/boxScores'>
